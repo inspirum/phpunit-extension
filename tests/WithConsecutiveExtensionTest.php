@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Inspirum\PHPUnit\Tests\Assertion;
+namespace Inspirum\PHPUnit\Tests;
 
 use Inspirum\PHPUnit\Extension;
 use PHPUnit\Framework\MockObject\Stub\Stub;

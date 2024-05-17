@@ -12,3 +12,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## v1.0.0 (2024-05-17) 
 ### Added
 - Added `withConsecutive` assertion method
+- Added `neverExpect` helper method

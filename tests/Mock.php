@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Inspirum\PHPUnit\Tests\Assertion;
+namespace Inspirum\PHPUnit\Tests;
 
 interface Mock
 {
