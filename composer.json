@@ -1,0 +1,85 @@
+{
+  "name": "inspirum/phpunit-extension",
+  "description": "PHPUnit extension with additional assertions",
+  "keywords": [
+    "testing",
+    "phpunit",
+    "extension",
+    "assertions",
+    "with-consecutive"
+  ],
+  "homepage": "https://github.com/inspirum/phpunit-extension",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Tomáš Novotný",
+      "email": "tomas.novotny@inspirum.cz",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "phpunit/phpunit": "^10.5"
+  },
+  "require-dev": {
+    "inspirum/coding-standard": "^1.5",
+    "phpstan/phpstan": "^1.10",
+    "shipmonk/composer-dependency-analyser": "^1.5",
+    "squizlabs/php_codesniffer": "^3.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "Inspirum\\PHPUnit\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Inspirum\\PHPUnit\\Tests\\": "tests"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "scripts": {
+    "test": [
+      "@style:phpcs",
+      "@test:unit",
+      "@style:phpstan",
+      "@check:dependency"
+    ],
+    "test:test": [
+      "@test:unit"
+    ],
+    "test:unit": [
+      "@phpunit --testsuite=Unit"
+    ],
+    "test:coverage": [
+      "@phpunit --coverage-text --coverage-html=var/phpunit/coverage"
+    ],
+    "style:phpcs": [
+      "@phpcs"
+    ],
+    "style:phpstan": [
+      "@phpstan -l 9"
+    ],
+    "style:check": [
+      "@style:phpcs",
+      "@style:phpstan"
+    ],
+    "style:fix": [
+      "@phpcbf src tests"
+    ],
+    "check:dependency": [
+      "@composer-dependency-analyser"
+    ],
+    "phpunit": "./vendor/bin/phpunit",
+    "phpcs": "./vendor/bin/phpcs -p -s --extensions=php --colors --report-width=140 || true",
+    "phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
+    "phpcbf": "./vendor/bin/phpcbf -p --extensions=php",
+    "composer-dependency-analyser": "./vendor/bin/composer-dependency-analyser"
+  }
+}
