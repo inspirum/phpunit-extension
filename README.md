@@ -88,11 +88,11 @@ Validate arguments and responses:
 ```php
 $mock->expects(self::exactly(count($arguments)))->method('example')
     ->will(self::withConsecutive(
-        [
+        arguments: [
             [1, 2, 0.1],
             [2, 3, 0.01],
         ], 
-        [
+        responses: [
             true,
             false,
         ],
@@ -107,7 +107,7 @@ Optional responses:
 ```php
 $mock->expects(self::exactly(count($arguments)))->method('example')
     ->will(self::withConsecutive(
-        [
+        arguments: [
             [1, 2, 0.1],
             [2, 3, 0.01],
         ], 
@@ -122,11 +122,11 @@ Simplification for same response for each call
 ```php
 $mock->expects(self::exactly(count($arguments)))->method('example')
     ->will(self::withConsecutive(
-        [
+        arguments: [
             [1, 2, 0.1],
             [2, 3, 0.01],
         ], 
-        true,
+        responses: true,
     ));
 
 self::assertTrue($mock->example(1, 2, 0.1));
@@ -138,11 +138,11 @@ Supports throwing exceptions:
 ```php
 $mock->expects(self::exactly(count($arguments)))->method('example')
     ->will(self::withConsecutive(
-        [
+        arguments: [
             [1, 2, 0.1],
             [2, 3, 0.01],
         ], 
-        [
+        responses: [
            true,
            new RuntimeException('Custom error'),
         ],
