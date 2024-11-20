@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/inspirum/phpunit-extension/compare/v1.1.0...master)
 
-## v1.1.0 (2024-11-20)
+## [v1.1.0 (2024-11-20)](https://github.com/inspirum/phpunit-extension/compare/v1.0.0...v1.1.0)
 ### Added
 - Adjusted `phpunit/phpunit` version constraint to `^10.5 || ^11.0`
 
