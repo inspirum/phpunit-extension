@@ -34,7 +34,7 @@ final class Assertion
         }
 
         if (!is_array($responses)) {
-            $responses = array_map(static fn() => $responses, $arguments);
+            $responses = array_map(static fn () => $responses, $arguments);
         }
 
         $indexes = count($arguments) > 0 ? range(0, count($arguments) - 1) : [];

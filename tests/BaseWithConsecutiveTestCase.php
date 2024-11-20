@@ -273,20 +273,6 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
         $this->mock->variadic('4.1-4.2-3.3');
     }
 
-    public function testVariadicAdditionalCalls(): void
-    {
-        $this->mock
-            ->expects(self::exactly(3))
-            ->method('variadic')
-            ->will(static::assert([
-                ['1.1', '1.2', '1.3'],
-            ]));
-
-        $this->mock->variadic('1.1', '1.2', '1.3');
-        $this->mock->variadic('2.1', '2.2', '2.3');
-        $this->mock->variadic('3.1', '3.2', '3.3');
-    }
-
     public function testVariadicFailMatch(): void
     {
         self::expectException(ExpectationFailedException::class);

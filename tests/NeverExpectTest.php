@@ -27,7 +27,7 @@ final class NeverExpectTest extends TestCase
 
     public function testNeverExpect(): void
     {
-        self::neverExpect([
+        $this->neverExpect([
             $this->mock1,
             $this->mock2,
             $this->mock3,

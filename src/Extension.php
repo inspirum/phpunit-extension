@@ -19,10 +19,10 @@ trait Extension
     /**
      * @param list<\PHPUnit\Framework\MockObject\MockObject> $mocks
      */
-    protected static function neverExpect(array $mocks): void
+    protected function neverExpect(array $mocks): void
     {
         foreach ($mocks as $mock) {
-            $mock->expects(self::never())->method(self::anything());
+            $mock->expects($this->never())->method(self::anything());
         }
     }
 }
