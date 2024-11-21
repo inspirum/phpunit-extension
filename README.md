@@ -31,7 +31,7 @@ final class CalculatorTest extends TestCase
         $arguments = [[1,2,3], [4,5,6]]
         $responses = [6, 120]
         
-        $mock->expects(self::exactly(count($arguments)))->method('multiply')
+        $mock->expects($this->exactly(count($arguments)))->method('multiply')
             ->withConsecutive(...$arguments)
             ->willReturnOnConsecutiveCalls(...$responses);
             
@@ -57,7 +57,7 @@ final class CalculatorTest extends TestCase
         $arguments = [[1,2,3], [4,5,6]]
         $responses = [6, 120]
         
-        $mock->expects(self::exactly(count($arguments)))->method('multiply')
+        $mock->expects($this->exactly(count($arguments)))->method('multiply')
             ->will(self::withConsecutive($arguments, $responses));
             
         // ... test
@@ -86,7 +86,7 @@ or add requirement to your `composer.json`
 Validate arguments and responses:
 
 ```php
-$mock->expects(self::exactly(2))->method('example')
+$mock->expects($this->exactly(2))->method('example')
     ->will(self::withConsecutive(
         arguments: [
             [1, 2, 0.1],
@@ -105,7 +105,7 @@ self::assertFalse($mock->example(2, 3, 0.01));
 Optional responses:
 
 ```php
-$mock->expects(self::exactly(2))->method('example')
+$mock->expects($this->exactly(2))->method('example')
     ->will(self::withConsecutive(
         arguments: [
             [1, 2, 0.1],
@@ -120,7 +120,7 @@ $mock->example(2, 3, 0.01);
 Simplification for same response for each call
 
 ```php
-$mock->expects(self::exactly(2))->method('example')
+$mock->expects($this->exactly(2))->method('example')
     ->will(self::withConsecutive(
         arguments: [
             [1, 2, 0.1],
@@ -136,7 +136,7 @@ self::assertTrue($mock->example(2, 3, 0.01));
 Supports throwing exceptions:
 
 ```php
-$mock->expects(self::exactly(2))->method('example')
+$mock->expects($this->exactly(2))->method('example')
     ->will(self::withConsecutive(
         arguments: [
             [1, 2, 0.1],
@@ -199,7 +199,7 @@ The MIT License (MIT). Please see [License File][link-licence] for more informat
 [ico-code-quality]:         https://img.shields.io/scrutinizer/g/inspirum/phpunit-extension.svg?style=flat-square
 [ico-packagist-stable]:     https://img.shields.io/packagist/v/inspirum/phpunit-extension.svg?style=flat-square&colorB=blue
 [ico-packagist-download]:   https://img.shields.io/packagist/dt/inspirum/phpunit-extension.svg?style=flat-square&colorB=blue
-[ico-phpstan]:              https://img.shields.io/badge/style-level%209-brightgreen.svg?style=flat-square&label=phpstan
+[ico-phpstan]:              https://img.shields.io/badge/style-level%2010-brightgreen.svg?style=flat-square&label=phpstan
 
 [link-author]:              https://github.com/inspirum
 [link-contributors]:        https://github.com/inspirum/phpunit-extension/contributors

@@ -36,7 +36,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testSingle(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('single')
             ->will(static::assert([
                 ['1'],
@@ -52,7 +52,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testEmpty(): void
     {
         $this->mock
-            ->expects(self::exactly(0))
+            ->expects($this->exactly(0))
             ->method('single')
             ->will(static::assert([], true));
     }
@@ -60,7 +60,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testSingleResponse(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('single')
             ->will(static::assert([
                 ['1'],
@@ -80,7 +80,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testSingleSameResponse(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('single')
             ->will(static::assert(
                 [
@@ -98,11 +98,11 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
 
     public function testSingleFailResponseLength(): void
     {
-        self::expectException(LengthException::class);
-        self::expectExceptionMessage('Arguments and responses arrays must be same length');
+        $this->expectException(LengthException::class);
+        $this->expectExceptionMessage('Arguments and responses arrays must be same length');
 
         $this->mock
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('single')
             ->will(static::assert([
                 ['1'],
@@ -115,11 +115,11 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
 
     public function testSingleExceptionResponse(): void
     {
-        self::expectException(RuntimeException::class);
-        self::expectExceptionMessage('Custom error');
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Custom error');
 
         $this->mock
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('single')
             ->will(static::assert([
                 ['1'],
@@ -138,7 +138,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testSingleStubResponse(): void
     {
         $this->mock
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('single')
             ->will(static::assert([
                 ['1'],
@@ -158,7 +158,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testSingleWithOptional(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('singleWithOptional')
             ->will(static::assert([
                 ['1'],
@@ -174,7 +174,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testSingleWithDefaultValue(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('singleWithDefault')
             ->will(static::assert([
                 ['1'],
@@ -190,7 +190,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testDouble(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('double')
             ->will(static::assert([
                 ['1.1', '1.2'],
@@ -206,7 +206,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testDoubleWithOptional(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('doubleWithOptional')
             ->will(static::assert([
                 ['1.1', '1.2'],
@@ -222,7 +222,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testDoubleWithDefault(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('doubleWithDefault')
             ->will(static::assert([
                 ['1.1', '1.2'],
@@ -238,7 +238,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testVariadic(): void
     {
         $this->mock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('variadic')
             ->will(static::assert([
                 ['1.1', '1.2', '1.3'],
@@ -254,7 +254,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testVariadicConstraint(): void
     {
         $this->mock
-            ->expects(self::exactly(4))
+            ->expects($this->exactly(4))
             ->method('variadic')
             ->will(static::assert([
                 [new IsAnything(), '1.2', '1.3'],
@@ -275,11 +275,11 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
 
     public function testVariadicFailMatch(): void
     {
-        self::expectException(ExpectationFailedException::class);
-        self::expectExceptionMessage("Parameter #2 for invocation #1 does not match expected value.\nFailed asserting that null matches expected '2.3'");
+        $this->expectException(ExpectationFailedException::class);
+        $this->expectExceptionMessage("Parameter #2 for invocation #1 does not match expected value.\nFailed asserting that null matches expected '2.3'");
 
         $this->mock
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('variadic')
             ->will(static::assert([
                 ['1.1', '1.2', '1.3'],
