@@ -1,6 +1,9 @@
 includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
 parameters:
+	featureToggles:
+		internalTag: false
 	level: 10
 	paths:
 		- src

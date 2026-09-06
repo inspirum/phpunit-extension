@@ -5,19 +5,64 @@ on:
   - pull_request
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
-    name: PHP ${{ matrix.php }}
+    name: Lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-composer-lint-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: Run linters
+        run: |
+          vendor/bin/phpcs src tests
+          vendor/bin/composer-dependency-analyser
+
+  test:
+    runs-on: ubuntu-latest
+    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }}
     strategy:
+      fail-fast: false
       matrix:
         php:
           - '8.1'
           - '8.2'
           - '8.3'
+          - '8.4'
+          - '8.5'
+        phpunit:
+          - '^10.5'
+          - '^11.5'
+          - '^12.5'
+          - '^13.0'
+        exclude:
+          - php: '8.1'
+            phpunit: '^11.5'
+          - php: '8.1'
+            phpunit: '^12.5'
+          - php: '8.1'
+            phpunit: '^13.0'
+          - php: '8.2'
+            phpunit: '^12.5'
+          - php: '8.2'
+            phpunit: '^13.0'
+          - php: '8.3'
+            phpunit: '^13.0'
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
       - name: Set up PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
@@ -25,24 +70,21 @@ jobs:
           coverage: xdebug
       - name: Get composer cache directory
         id: composercache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.phpunit }}-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
-      - name: Run linters
-        run: |
-          vendor/bin/phpcs src tests
-          vendor/bin/phpstan analyse -c phpstan.neon
-          vendor/bin/composer-dependency-analyser
+        run: composer update --with "phpunit/phpunit:${{ matrix.phpunit }}" --prefer-dist --no-interaction --no-progress
+      - name: Run static analysis
+        run: vendor/bin/phpstan analyse -c phpstan.neon --no-progress
       - name: Run tests
+        run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+      - name: Upload coverage
+        if: matrix.php == '8.5' && matrix.phpunit == '^13.0'
         run: |
-          vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
-          if [[ "${{ matrix.php }}" == '8.3' ]]; then
-            composer require --dev --no-interaction --no-progress --quiet scrutinizer/ocular
-            vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
-          fi
+          composer require --dev --no-interaction --no-progress --quiet scrutinizer/ocular
+          vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
