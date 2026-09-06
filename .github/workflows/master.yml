@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -62,7 +63,10 @@ jobs:
           - php: '8.3'
             phpunit: '^13.0'
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
@@ -84,7 +88,7 @@ jobs:
       - name: Run tests
         run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
       - name: Upload coverage
-        if: matrix.php == '8.5' && matrix.phpunit == '^13.0'
+        if: matrix.php == '8.3' && matrix.phpunit == '^12.5'
         run: |
           composer require --dev --no-interaction --no-progress --quiet scrutinizer/ocular
           vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
