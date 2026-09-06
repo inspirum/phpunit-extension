@@ -117,7 +117,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testSingleExceptionResponse(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageIs('Custom error');
+        $this->expectExceptionMessage('Custom error');
 
         $this->mock
             ->expects($this->exactly(2))
