@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inspirum\PHPUnit\Tests;
 
+use InvalidArgumentException;
 use LengthException;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\Constraint\GreaterThan;
@@ -102,7 +103,7 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
         $this->expectExceptionMessage('Arguments and responses arrays must be same length');
 
         $this->mock
-            ->expects($this->any())
+            ->expects($this->never())
             ->method('single')
             ->will(static::assert([
                 ['1'],
@@ -116,10 +117,10 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
     public function testSingleExceptionResponse(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Custom error');
+        $this->expectExceptionMessageIs('Custom error');
 
         $this->mock
-            ->expects($this->any())
+            ->expects($this->exactly(2))
             ->method('single')
             ->will(static::assert([
                 ['1'],
@@ -132,13 +133,14 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
             ]));
 
         self::assertSame(true, $this->mock->single('1'));
+
         $this->mock->single('2');
     }
 
     public function testSingleStubResponse(): void
     {
         $this->mock
-            ->expects($this->any())
+            ->expects($this->exactly(3))
             ->method('single')
             ->will(static::assert([
                 ['1'],
@@ -278,15 +280,63 @@ abstract class BaseWithConsecutiveTestCase extends TestCase
         $this->expectException(ExpectationFailedException::class);
         $this->expectExceptionMessage("Parameter #2 for invocation #1 does not match expected value.\nFailed asserting that null matches expected '2.3'");
 
-        $this->mock
-            ->expects($this->exactly(2))
+        $this->mock->expects($this->never())->method(self::anything());
+
+        $mock = self::createStub(Mock::class);
+        $mock
             ->method('variadic')
             ->will(static::assert([
                 ['1.1', '1.2', '1.3'],
                 ['2.1', '2.2', '2.3'],
             ]));
 
-        $this->mock->variadic('1.1', '1.2', '1.3');
-        $this->mock->variadic('2.1', '2.2');
+        $mock->variadic('1.1', '1.2', '1.3');
+        $mock->variadic('2.1', '2.2');
+    }
+
+    public function testException(): void
+    {
+        $this->mock
+            ->expects($this->exactly(3))
+            ->method('single')
+            ->will(static::assert([
+                ['1'],
+                ['2'],
+                ['3'],
+            ], [
+                1,
+                new InvalidArgumentException('A'),
+                3,
+            ]));
+
+        self::assertSame(1, $this->mock->single('1'));
+
+        try {
+            $this->mock->single('2');
+            $this->expectNotToPerformAssertions();
+        } catch (InvalidArgumentException $exception) {
+            self::assertSame('A', $exception->getMessage());
+        }
+
+        self::assertSame(3, $this->mock->single('3'));
+    }
+
+    public function testExceptionArg(): void
+    {
+        self::expectException(ExpectationFailedException::class);
+        self::expectExceptionMessage("Parameter #0 for invocation #0 does not match expected value.\nFailed asserting that two strings are equal.");
+
+        $this->mock->expects($this->never())->method(self::anything());
+
+        $stub = self::createStub(Mock::class);
+        $stub
+            ->method('single')
+            ->will(static::assert([
+                ['1'],
+            ], [
+                new InvalidArgumentException('A'),
+            ]));
+
+        $stub->single('2');
     }
 }

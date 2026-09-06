@@ -10,7 +10,6 @@ use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
-use PHPUnit\Framework\MockObject\Stub\Exception;
 use PHPUnit\Framework\MockObject\Stub\ReturnCallback;
 use PHPUnit\Framework\MockObject\Stub\Stub;
 use Throwable;
@@ -44,10 +43,6 @@ final class Assertion
                 return $response;
             }
 
-            if ($response instanceof Throwable) {
-                return new Exception($response);
-            }
-
             return new ReturnCallback(static function () use ($arguments, $response, $i) {
                 if ($arguments instanceof Callback) {
                     $arguments->evaluate(func_get_arg(0));
@@ -60,6 +55,10 @@ final class Assertion
 
                         Assert::assertThat($actualArguments[$j] ?? null, $argument, sprintf('Parameter #%d for invocation #%d does not match expected value.', $j, $i));
                     }
+                }
+
+                if ($response instanceof Throwable) {
+                    throw $response;
                 }
 
                 return $response;
