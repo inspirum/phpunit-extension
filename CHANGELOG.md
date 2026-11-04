@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased](https://github.com/inspirum/phpunit-extension/compare/v1.2.0...master)
+## [Unreleased](https://github.com/inspirum/phpunit-extension/compare/v1.2.0...main)
+### Changed
+- Renamed the default branch from `master` to `main`
+### Removed
+- Removed local issue and pull request templates in favour of the shared [inspirum/.github](https://github.com/inspirum/.github) defaults
 
 
 ## [v1.2.0 (2026-09-06)](https://github.com/inspirum/phpunit-extension/compare/v1.1.0...v1.2.0)
